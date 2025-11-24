@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FoxWorld Map</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+    html, body {
+        height: 100%;
+        margin: 0;
+    }
+    #map {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: 100vw;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+    }
+</style>
+</head>
+<body>
+    <div id="map"></div>
+
+    <script>
+        // Image dimensions
+        const mapWidth = 4000;  // change to your image width
+        const mapHeight = 3000; // change to your image height
+        const bounds = [[0, 0], [mapHeight, mapWidth]];
+
+        // Initialize map
+        const map = L.map('map', {
+            crs: L.CRS.Simple,
+            maxBounds: bounds,
+            maxBoundsViscosity: 1.0
+        });
+
+        // Add image overlay
+        L.imageOverlay('img/Zemya.png', bounds).addTo(map);
+
+        // Fit map to bounds
+        map.fitBounds(bounds);
+
+        // Prevent zooming out beyond bounds
+        function updateMinZoom() {
+            const mapSize = map.getSize();
+            const minZoomX = mapSize.x / mapWidth;
+            const minZoomY = mapSize.y / mapHeight;
+            const minZoom = Math.min(minZoomX, minZoomY);
+            map.setMinZoom(minZoom);
+        }
+
+        updateMinZoom();
+        window.addEventListener('resize', updateMinZoom);
+    </script>
+</body>
+</html>
